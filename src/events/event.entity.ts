@@ -17,4 +17,7 @@ export class Event {
 
   @Column()
   address: string;
+
+  // @OneToMany(() => Attendee, (attendee) => attendee.event)
+  // attendees: Attendee[];
 }

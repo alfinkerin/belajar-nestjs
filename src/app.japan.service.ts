@@ -10,7 +10,7 @@ export class AppjapanService {
     private readonly message: string,
   ) {}
   getHello(): string {
-    console.log(process.env);
+    console.log(process.env.DB_HOST);
     return `Hello japan! from ${this.name}, ${this.message}`;
   }
 }

@@ -2,26 +2,27 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Event } from './events/event.entity';
 import { EventsModule } from './events/events.module';
 import { AppjapanService } from './app.japan.service';
 import { AppDummy } from './app.dummy';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import ormConfig from './config/orm.config';
+import ormConfigProd from './config/orm.config.prod';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '127.0.0.1',
-      port: 3307,
-      username: 'root',
-      password: 'example',
-      database: 'nest-events',
-      entities: [Event],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [ormConfig],
     }),
+    TypeOrmModule.forRootAsync({
+      useFactory:
+        process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd,
+    }),
+    AuthModule,
     EventsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
